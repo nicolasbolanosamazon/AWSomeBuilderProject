@@ -19,3 +19,4 @@ functions:
 
 resources:
   - ${file(resources/tenants-cognito-user-pool.yml)}
+  - ${file(resources/tenants-dynamodb-table.yml)}

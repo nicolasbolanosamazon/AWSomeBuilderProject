@@ -1,0 +1,11 @@
+Resources:
+  TenantTableDynamo:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.stage}-tenants-table
+      AttributeDefinitions:
+        - AttributeName: tenant_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: tenant_id
+          KeyType: HASH
