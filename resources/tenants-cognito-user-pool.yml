@@ -6,22 +6,22 @@ Resources:
       UserPoolName: tenants-${self:custom.stage}-user-pool
       # Set email as an alias
       UsernameAttributes:
-        - email
+        - "email"
       AutoVerifiedAttributes:
-        - email
+        - "email"
       Schema:
-        - Name: fullname
-          Required: true
+        - Name: "fullname"
+          Required: True
           AttributeDataType: "String"
-          Mutable: true
-        - Name: tenantId
-          Required: true
+          Mutable: True
+        - Name: "tenantId"
+          Required: True
           AttributeDataType: "String"
-          Mutable: true
-        - Name: email
-          Required: true
+          Mutable: True
+        - Name: "email"
+          Required: True
           AttributeDataType: "String"
-          Mutable: true
+          Mutable: True
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
