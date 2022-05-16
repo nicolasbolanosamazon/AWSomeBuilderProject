@@ -123,3 +123,4 @@ var/
 
 # Serverless directories
 .serverless
+__pycache__/handler.cpython-39.pyc
