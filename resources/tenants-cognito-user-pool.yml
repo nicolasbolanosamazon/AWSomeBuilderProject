@@ -6,9 +6,9 @@ Resources:
       UserPoolName: tenants-${self:custom.stage}-user-pool
       # Set email as an alias
       UsernameAttributes:
-        - "email"
+        - email
       AutoVerifiedAttributes:
-        - "email"
+        - email
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
@@ -17,9 +17,6 @@ Resources:
       ClientName: tenants-${self:custom.stage}-user-pool-client
       UserPoolId:
         Ref: CognitoUserPool
-      AllowedOAuthFlows:
-        - code
-        - implicit
       GenerateSecret: false
 
 # Print out the Id of the User Pool that is created
