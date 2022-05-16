@@ -5,6 +5,13 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: python3.8
+  stage: ${self:custom.common.currentStage}
+
+custom:
+  common:
+    defaultStage: dev
+    region: ${opt:region, 'us-east-1'}
+    currentStage: ${opt:stage, self:custom.common.defaultStage}
 
 functions:
   hello:
