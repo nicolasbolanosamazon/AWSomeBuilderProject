@@ -9,3 +9,6 @@ provider:
 functions:
   hello:
     handler: handler.hello
+
+resources:
+  - ${file(resources/tenants-cognito-user-pool.yml)}
