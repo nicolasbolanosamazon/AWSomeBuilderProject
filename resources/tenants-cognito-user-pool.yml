@@ -14,6 +14,10 @@ Resources:
           Mutable: True
           Name: tenant_id
           Required: False
+        - AttributeDataType: String
+          Mutable: True
+          Name: full_name
+          Required: False
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
