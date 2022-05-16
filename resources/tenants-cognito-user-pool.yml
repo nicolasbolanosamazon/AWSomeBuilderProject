@@ -12,14 +12,15 @@ Resources:
       Schema:
         - Name: fullname
           Required: true
-          AttributeDataType: String
+          AttributeDataType: "String"
           Mutable: true
         - Name: tenant-id
           Required: true
-          AttributeDataType: String
+          AttributeDataType: "String"
           Mutable: true
         - Name: email
           Required: true
+          AttributeDataType: "String"
           Mutable: true
 
   CognitoUserPoolClient:
