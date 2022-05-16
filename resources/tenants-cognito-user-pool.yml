@@ -9,6 +9,11 @@ Resources:
         - email
       AutoVerifiedAttributes:
         - email
+      Schema:
+        - AttributeDataType: String
+          Mutable: True
+          Name: tenant_id
+          Required: False
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
