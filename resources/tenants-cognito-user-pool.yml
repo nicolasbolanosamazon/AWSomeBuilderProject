@@ -10,17 +10,13 @@ Resources:
       AutoVerifiedAttributes:
         - email
       Schema:
-        - Name: "fullname"
+        - Name: fullname
           Required: True
-          AttributeDataType: "String"
+          AttributeDataType: String
           Mutable: True
-        - Name: "tenantId"
+        - Name: tenantId
           Required: True
-          AttributeDataType: "String"
-          Mutable: True
-        - Name: "email"
-          Required: True
-          AttributeDataType: "String"
+          AttributeDataType: String
           Mutable: True
 
   CognitoUserPoolClient:
