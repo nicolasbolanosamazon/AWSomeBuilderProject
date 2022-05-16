@@ -27,6 +27,9 @@ Resources:
       UserPoolId:
         Ref: CognitoUserPool
       GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
 
 # Print out the Id of the User Pool that is created
 Outputs:
