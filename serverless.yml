@@ -12,7 +12,7 @@ custom:
     defaultStage: dev
     region: ${opt:region, 'us-east-1'}
     currentStage: ${opt:stage, self:custom.common.defaultStage}
-
+  stage: ${self:custom.common.currentStage}
 functions:
   hello:
     handler: handler.hello
