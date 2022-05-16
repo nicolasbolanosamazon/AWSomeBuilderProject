@@ -9,3 +9,6 @@ Resources:
       KeySchema:
         - AttributeName: tenant_id
           KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
