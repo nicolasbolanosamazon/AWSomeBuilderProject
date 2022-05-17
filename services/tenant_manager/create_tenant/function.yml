@@ -1,9 +1,9 @@
 create_tenant:
   handler: services/tenant_manager/create_tenant.create_tenant
   events:
-    http:
-      method: POST
-      path: /tenant_managment/create_tenant
+    - http:
+        method: POST
+        path: /tenant_managment/create_tenant
   package:
     patterns: 
       - services/tenant_manager/create_tenant.py
