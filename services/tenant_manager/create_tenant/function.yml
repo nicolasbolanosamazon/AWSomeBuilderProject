@@ -1,5 +1,5 @@
 create_tenant:
-  handler: services/tenant_manager/create_tenant.create_tenant
+  handler: services/tenant_manager/create_tenant/lambda_function.create_tenant
   events:
     - http:
         method: POST
