@@ -7,7 +7,12 @@ provider:
   runtime: python3.8
   stage: ${self:custom.common.currentStage}
 
+plugins:
+  - serverless-python-requirements
+ 
 custom:
+  pythonRequirements:
+    dockerizePip: non-linux
   common:
     defaultStage: dev
     region: ${opt:region, 'us-east-1'}

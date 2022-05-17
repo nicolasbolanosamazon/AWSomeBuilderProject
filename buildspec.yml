@@ -7,11 +7,8 @@ phases:
       python: 3.8
     commands:
       - npm install -g serverless
+      - npm install serverless-python-requirements
       - npm install
-      - pip install jsonpickle
-      - pip install boto3
-      - pip install aws_requests_auth
-      - pip install aws_lambda_powertools 
   build:
     commands:
       - serverless deploy
