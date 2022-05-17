@@ -6,6 +6,6 @@ create_tenant:
         path: /tenant_managment/create_tenant
   package:
     patterns: 
-      - services/tenant_manager/create_tenant.py
+      - services/tenant_manager/create_tenant/lambda_function.py
   environment:
     TABLE_NAME: ${self:custom.tenantTable}
