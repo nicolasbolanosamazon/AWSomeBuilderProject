@@ -13,9 +13,9 @@ custom:
     region: ${opt:region, 'us-east-1'}
     currentStage: ${opt:stage, self:custom.common.defaultStage}
   stage: ${self:custom.common.currentStage}
+  tenantTable: ${self:custom.stage}-tenants-table
 functions:
-  hello:
-    handler: handler.hello
+  - ${file(services/tenant_manager/create_tenant/function.yml)}
 
 resources:
   - ${file(resources/tenants-cognito-user-pool.yml)}

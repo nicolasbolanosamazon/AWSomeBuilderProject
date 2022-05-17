@@ -2,7 +2,7 @@ Resources:
   TenantTableDynamo:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: ${self:custom.stage}-tenants-table
+      TableName: ${self:custom.tenantTable}
       AttributeDefinitions:
         - AttributeName: tenant_id
           AttributeType: S
