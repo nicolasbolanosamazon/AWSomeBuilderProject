@@ -1,5 +1,5 @@
 import json
-import layers.utils as utils
+#import layers.utils as utils
 import boto3
 from os import environ
 
