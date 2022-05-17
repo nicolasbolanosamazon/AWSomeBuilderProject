@@ -1,5 +1,5 @@
 import json
-import jsonpickle
+#import jsonpickle
 
 import boto3
 from aws_requests_auth.aws_auth import AWSRequestsAuth
@@ -22,7 +22,7 @@ def create_success_response(message):
             "message": message
         }),
     }
-
+"""
 def generate_response(inputObject):
     return {
         "statusCode": 200,
@@ -38,7 +38,7 @@ def  encode_to_json_object(inputObject):
     jsonpickle.set_encoder_options('simplejson', use_decimal=True, sort_keys=True)
     jsonpickle.set_preferred_backend('simplejson')
     return jsonpickle.encode(inputObject, unpicklable=False, use_decimal=True)
-
+"""
 
 def get_auth(host, region):
     session = boto3.Session()
