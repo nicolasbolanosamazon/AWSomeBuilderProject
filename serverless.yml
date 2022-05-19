@@ -6,9 +6,19 @@ provider:
   name: aws
   runtime: python3.8
   stage: ${self:custom.common.currentStage}
+  environment:
+    LOG_ENABLED: "True"
+  apiGateway:
+    apiKeys:
+      - internal-endpoints-key
 
+plugins:
+  - serverless-iam-roles-per-function
+  - serverless-python-requirements
  
 custom:
+  pythonRequirements:
+    dockerizePip: true
   common:
     defaultStage: dev
     region: ${opt:region, 'us-east-1'}
@@ -17,6 +27,9 @@ custom:
   tenantTable: ${self:custom.stage}-tenants-table
 functions:
   - ${file(services/tenant_manager/create_tenant/function.yml)}
+  - ${file(services/tenant_onboarding/function.yml)}
+  - ${file(services/user_manager/create_user_group/function.yml)}
+  - ${file(services/resource_manager/create_aurora_cluster/function.yml)}
 
 resources:
   - ${file(resources/tenants-cognito-user-pool.yml)}

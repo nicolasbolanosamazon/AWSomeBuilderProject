@@ -1,0 +1,19 @@
+create_user_group:
+  handler: services/user_manager/create_user_group/lambda_function.handler
+  events:
+    - http:
+        method: POST
+        path: /user_manager/create_user_group
+        private: true
+  package:
+    patterns:
+      - services/user_manager/create_user_group/lambda_function.py
+  environment:
+    COGNITO_POOL_ID:
+      Ref: CognitoUserPool
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - cognito-idp:CreateGroup
+      Resource:
+        Fn::GetAtt: [CognitoUserPool, Arn]

@@ -1,0 +1,11 @@
+tenant_onboarding:
+  handler: services/tenant_onboarding/lambda_function.handler
+  events:
+    - http:
+        method: POST
+        path: /onboard_tenant
+  package:
+    patterns:
+      - services/tenant_onboarding/lambda_function.py
+  environment:
+    API_KEYS: "e2tAT0Apq98VvrjTW3hKsOMSw3wlVE52SdvklE8e"

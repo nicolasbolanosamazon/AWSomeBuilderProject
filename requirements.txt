@@ -1,4 +1,1 @@
-aws-lambda-powertools
-simplejson
-jsonpickle
-aws_requests_auth
+requests

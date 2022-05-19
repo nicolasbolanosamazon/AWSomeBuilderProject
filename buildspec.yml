@@ -7,6 +7,7 @@ phases:
       python: 3.8
     commands:
       - npm install -g serverless
+      - npm install serverless-iam-roles-per-function
       - npm install serverless-python-requirements
       - npm install
   build:

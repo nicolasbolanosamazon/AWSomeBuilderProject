@@ -1,38 +1,45 @@
-import json
-#import layers.utils as utils
+import logging
+from layers.base import EventBase, ResultBase, Response
 import boto3
-from os import environ
+import os
 
-dynamodb = boto3.resource('dynamodb')
+LOGGER = logging.getLogger(__name__)
 
-table_tenant_details = dynamodb.Table(environ.get('TABLE_NAME'))
+def handler(e, c):
+    event = Event(e, c)
+    event.handle()
+    return event.response()
 
-def create_tenant(event, context):
-    return {
-        "statusCode": 200,
-        "headers": {
-            "Access-Control-Allow-Headers" : "Content-Type, Origin, X-Requested-With, Accept, Authorization, Access-Control-Allow-Methods, Access-Control-Allow-Headers, Access-Control-Allow-Origin",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT"
-        },
-        "body": json.dumps({
-            "message": event
-        }),
-    }
-    """
-    tenant_details = json.loads(event['body'])
+class Result(ResultBase):
+    CREATION_SUCCEEDED = (200, "CREATION SUCCEEDED", "Creation succeeded")
+    UNKNOWN = (500, "SERVER_ERROR", "Server Error")
 
-    try:          
-        response = table_tenant_details.put_item(
-            Item={
-                    'tenantId': tenant_details['tenantId'],
-                    'tenantName' : tenant_details['tenantName'],
-                    'tenantDescription': tenant_details['tenantDescription'],                  
-                    'isActive': True                    
-                }
-            )                    
-    except Exception as e:
-        raise Exception('Error creating a new tenant', e)
-    else:
-        return utils.create_success_response("Tenant Created")
-    """
+
+class Event(EventBase):
+    def __init__(self, event, context):
+        EventBase.__init__(self, event, context)
+        self.__dynamodb_table_resource = boto3.resource('dynamodb')
+        self.__table_tenant_details = self.__dynamodb_table_resource.Table(os.environ['TABLE_NAME'])
+
+    def handle(self):
+        result, data = self.create_tenant()
+        self._response = Response(result, data).to_json()
+
+    def create_tenant(self):
+        tenant_details = self._body
+
+        try:         
+            response = self.__table_tenant_details.put_item(
+                Item={
+                        'tenant_id': tenant_details['tenant_id'],
+                        'tenantName' : tenant_details['tenantName'],
+                        'tenantDescription': tenant_details['tenantDescription'],              
+                        'isActive': True                    
+                    }
+                )                    
+
+        except Exception as e:
+            LOGGER.error(e)
+            return Result.UNKNOWN, {}
+        else:
+            return Result.CREATION_SUCCEEDED, response

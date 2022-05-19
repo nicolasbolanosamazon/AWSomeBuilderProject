@@ -1,0 +1,20 @@
+create_aurora_cluster:
+  handler: services/resource_manager/create_aurora_cluster/lambda_function.handler
+  events:
+    - http:
+        method: POST
+        path: /resource_manager/create_aurora_cluster
+  package:
+    patterns:
+      - services/resource_manager/create_aurora_cluster/lambda_function.py
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - secretsmanager:CreateSecret
+        - secretsmanager:GetRandomPassword
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - rds:CreateDBCluster
+        - rds:AddTagsToResource
+      Resource: "*"
