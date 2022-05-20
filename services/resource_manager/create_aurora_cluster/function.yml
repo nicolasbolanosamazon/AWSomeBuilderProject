@@ -4,6 +4,7 @@ create_aurora_cluster:
     - http:
         method: POST
         path: /resource_manager/create_aurora_cluster
+        private: true
   package:
     patterns:
       - services/resource_manager/create_aurora_cluster/lambda_function.py
@@ -16,5 +17,6 @@ create_aurora_cluster:
     - Effect: "Allow"
       Action:
         - rds:CreateDBCluster
+        - rds:CreateDBInstance
         - rds:AddTagsToResource
       Resource: "*"

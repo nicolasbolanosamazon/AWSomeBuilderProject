@@ -21,7 +21,7 @@ class Event(EventBase):
         EventBase.__init__(self, event, context)
         self.__secrets_manager_client = boto3.client('secretsmanager')
         self.__rds_client = boto3.client('rds')
-        self.__sample_id = uuid.uuid4().hex
+        self.__tenant_id = self._body['tenant_id']
 
     def handle(self):
         result, data = self.create_aurora_cluster()
@@ -32,26 +32,13 @@ class Event(EventBase):
         try:
             data = {}
             data['randomPassword'] = self.generateRandomPassword()
-            db_response = self.create_cluster(data)
-            print(db_response)
-            secret = {
-                "engine": "mysql",
-                "host": "samplehost",
-                "username": self.__sample_id,
-                "password": data['randomPassword'],
-                "dbname": "sampledb",
-                "port": 3306
-            }
-            data['newSecret'] = self.__secrets_manager_client.create_secret(
-                Name = self.__sample_id,
-                Description = "Sample Secret",
-                SecretString = json.dumps(secret)
-            )
+            self.create_instance(data)
+            self.store_db_secret(data)
         except Exception as e:
             LOGGER.error(e)
             return Result.UNKNOWN, {}
         else:
-            return Result.CREATION_SUCCEEDED, data
+            return Result.CREATION_SUCCEEDED, self.create_response(data)
 
     def generateRandomPassword(self):
         response = self.__secrets_manager_client.get_random_password(
@@ -60,20 +47,56 @@ class Event(EventBase):
         )
         return response['RandomPassword']
 
-    def create_cluster(self, data):
-        dbname = ''.join(['db-',self.__sample_id])
-        return self.__rds_client.create_db_cluster(
+    def create_instance(self, data):
+        dbname = ''.join(['db-',self.__tenant_id])
+        db_masteruser = ''.join(['masteruser',self.__tenant_id])
+        data['cluster'] = self.__rds_client.create_db_cluster(
                 DatabaseName= 'octanklmsdb',
                 DBClusterIdentifier = dbname,
                 Engine = 'aurora-postgresql',
                 EngineVersion = '13.4',
-                MasterUsername = self.__sample_id,
+                MasterUsername = db_masteruser,
                 MasterUserPassword = data['randomPassword'],
                 Tags = [
                     {
                         'Key':'tenant_id',
-                        'Value':self.__sample_id
+                        'Value':self.__tenant_id
                     }
                 ],
                 StorageEncrypted = True
         )
+        data['instances'] = []
+        data['instances'].append(self.__rds_client.create_db_instance(
+                DBInstanceIdentifier = dbname,
+                DBInstanceClass = 'db.r6g.large',
+                DBClusterIdentifier = dbname,
+                Engine = 'aurora-postgresql',
+                EngineVersion = '13.4',
+                Tags = [
+                    {
+                        'Key':'tenant_id',
+                        'Value':self.__tenant_id
+                    }
+                ]
+        ))
+        
+    def store_db_secret(self, data):
+        secret = {
+                "engine": data['cluster']['DBCluster']['Engine'],
+                "host": data['cluster']['DBCluster']['Endpoint'],
+                "username": data['cluster']['DBCluster']['MasterUsername'],
+                "password": data['randomPassword'],
+                "dbname": data['cluster']['DBCluster']['DatabaseName'],
+                "port": data['cluster']['DBCluster']['Port']
+            }
+        print(secret)
+        data['newSecret'] = self.__secrets_manager_client.create_secret(
+            Name = self.__tenant_id,
+            Description = ''.join(["Amazon Aurora Cluster access credentials for tenant ID: ", self.__tenant_id]),
+            SecretString = json.dumps(secret)
+        )
+
+    def create_response(self, data):
+        return {
+                    "dbCredentials": data['newSecret']['ARN'],
+        }

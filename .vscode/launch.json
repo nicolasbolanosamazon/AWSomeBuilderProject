@@ -1,0 +1,41 @@
+{
+    "configurations": [
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "Invoke Lambda with API Gateway",
+            "invokeTarget": {
+                "target": "api",
+                "templatePath": "Template Location",
+                "logicalId": "Function Logical ID"
+            },
+            "api": {
+                "path": "Path",
+                "httpMethod": "POST",
+                "payload": {
+                    "json": {
+                        "tenantId": 1,
+                        "tenantName" : "Una universidad",
+                        "tenantDescription": "una universidad",                  
+                        "isActive": true   
+                    }
+                }
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "AWSomeBuilderProject:services/tenant_onboarding/lambda_function.handler (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "${workspaceFolder}/",
+                "lambdaHandler": "services/tenant_onboarding/lambda_function.handler"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        }
+    ]
+}

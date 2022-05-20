@@ -2,7 +2,7 @@ import uuid
 import logging
 import json
 from layers.base import EventBase, ResultBase, Response
-import os
+import boto3
 import requests
 
 LOGGER = logging.getLogger(__name__)
@@ -20,6 +20,7 @@ class Event(EventBase):
     def __init__(self, event, context):
         EventBase.__init__(self, event, context)
         self.__tenant_id = uuid.uuid4().hex
+        self.__secrets_manager_client = boto3.client('secretsmanager')
 
     def handle(self):
         result, data = self.register_tenant()
@@ -33,16 +34,27 @@ class Event(EventBase):
             stage_name = self._event['requestContext']['stage']
             host = self._event['headers']['Host']
             headers = self._event['headers']
-            headers['x-api-key'] = os.environ['API_KEYS']
-            paths = ['/user_manager/create_user_group', '/tenant_managment/create_tenant']
+            retreived_secret = {}
+            retreived_secret['Secret'] = self.__secrets_manager_client.get_secret_value(
+                SecretId='dev-api-keys'
+            )
+            secret = json.loads(retreived_secret['Secret']['SecretString'])
+            headers['x-api-key'] = secret['dev-api-keys']
+            paths = ['/user_manager/create_user_group', '/resource_manager/create_aurora_cluster','/tenant_managment/create_tenant']
             data = {}
             data['responses'] = []
             for path in paths:
                 url = ''.join(['https://', host, '/', stage_name, path])
                 response = requests.post(url, data=json.dumps(tenant_details), headers=headers)
+                print(response)
+                """
                 if response.status_code != 200:
                     raise Exception(''.join(["Error during request to ", url]))
-                data['responses'].append(response.text)
+                """
+                if path == '/resource_manager/create_aurora_cluster':
+                   print("a")
+                #data['responses'].append(response.text)
+                
             data['response'] = ''.join(["Tenant ",self.__tenant_id, " created!"])
             data['tenant_id'] = self.__tenant_id
             print(data)

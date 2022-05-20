@@ -7,5 +7,8 @@ tenant_onboarding:
   package:
     patterns:
       - services/tenant_onboarding/lambda_function.py
-  environment:
-    API_KEYS: "e2tAT0Apq98VvrjTW3hKsOMSw3wlVE52SdvklE8e"
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - secretsmanager:GetSecretValue
+      Resource: 'arn:aws:secretsmanager:us-east-1:238181680470:secret:dev-api-keys-TTv22n'
