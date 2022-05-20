@@ -33,11 +33,12 @@ class Event(EventBase):
                 Item={
                         'tenant_id': tenant_details['tenant_id'],
                         'tenantName' : tenant_details['tenantName'],
-                        'tenantDescription': tenant_details['tenantDescription'],              
+                        'tenantDescription': tenant_details['tenantDescription'],
+                        'dbCredentialsARN': tenant_details['dbCredentialsARN'],   
                         'isActive': True                    
                     }
                 )                    
-
+            print(response)
         except Exception as e:
             LOGGER.error(e)
             return Result.UNKNOWN, {}

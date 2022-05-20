@@ -1,7 +1,6 @@
 import logging
 from layers.base import EventBase, ResultBase, Response
 import boto3
-import uuid
 import json
 
 LOGGER = logging.getLogger(__name__)
@@ -34,6 +33,7 @@ class Event(EventBase):
             data['randomPassword'] = self.generateRandomPassword()
             self.create_instance(data)
             self.store_db_secret(data)
+            print(data)
         except Exception as e:
             LOGGER.error(e)
             return Result.UNKNOWN, {}
@@ -77,7 +77,8 @@ class Event(EventBase):
                         'Key':'tenant_id',
                         'Value':self.__tenant_id
                     }
-                ]
+                ],
+                PubliclyAccessible = True
         ))
         
     def store_db_secret(self, data):
@@ -89,7 +90,6 @@ class Event(EventBase):
                 "dbname": data['cluster']['DBCluster']['DatabaseName'],
                 "port": data['cluster']['DBCluster']['Port']
             }
-        print(secret)
         data['newSecret'] = self.__secrets_manager_client.create_secret(
             Name = self.__tenant_id,
             Description = ''.join(["Amazon Aurora Cluster access credentials for tenant ID: ", self.__tenant_id]),

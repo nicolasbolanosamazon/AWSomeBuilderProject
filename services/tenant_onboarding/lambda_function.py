@@ -40,24 +40,22 @@ class Event(EventBase):
             )
             secret = json.loads(retreived_secret['Secret']['SecretString'])
             headers['x-api-key'] = secret['dev-api-keys']
-            paths = ['/user_manager/create_user_group', '/resource_manager/create_aurora_cluster','/tenant_managment/create_tenant']
+            paths = ["/user_manager/create_user_group", "/resource_manager/create_aurora_cluster","/tenant_managment/create_tenant"]
             data = {}
-            data['responses'] = []
+            request_body = json.dumps(tenant_details)
             for path in paths:
                 url = ''.join(['https://', host, '/', stage_name, path])
-                response = requests.post(url, data=json.dumps(tenant_details), headers=headers)
-                print(response)
-                """
+                response = requests.post(url, data=request_body, headers=headers, timeout=(5, 30))
+                print(response.text)
                 if response.status_code != 200:
-                    raise Exception(''.join(["Error during request to ", url]))
-                """
-                if path == '/resource_manager/create_aurora_cluster':
-                   print("a")
-                #data['responses'].append(response.text)
+                    return Result.UNKNOWN, {}
+                if path == "/resource_manager/create_aurora_cluster":
+                   response_body = json.loads(response.text)
+                   tenant_details['dbCredentialsARN'] = response_body['dbCredentials']
+                   request_body = json.dumps(tenant_details)
                 
             data['response'] = ''.join(["Tenant ",self.__tenant_id, " created!"])
             data['tenant_id'] = self.__tenant_id
-            print(data)
         except Exception as e:
             LOGGER.error(e)
             return Result.UNKNOWN, {}
