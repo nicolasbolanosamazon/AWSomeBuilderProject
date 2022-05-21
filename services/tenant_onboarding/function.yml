@@ -1,5 +1,6 @@
 tenant_onboarding:
   handler: services/tenant_onboarding/lambda_function.handler
+  timeout: 15
   events:
     - http:
         method: POST

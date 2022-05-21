@@ -1,5 +1,6 @@
 create_aurora_cluster:
   handler: services/resource_manager/create_aurora_cluster/lambda_function.handler
+  timeout: 15
   events:
     - http:
         method: POST

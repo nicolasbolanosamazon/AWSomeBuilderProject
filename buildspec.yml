@@ -10,6 +10,8 @@ phases:
       - npm install serverless-iam-roles-per-function
       - npm install serverless-python-requirements
       - npm install
+      - pip3 install requests
+      - pip3 install aws-psycopg2
   build:
     commands:
       - serverless deploy

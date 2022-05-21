@@ -1,0 +1,22 @@
+post_aurora_creation:
+  handler: services/resource_manager/post_aurora_creation/lambda_function.handler
+  timeout: 15
+  events:
+    - sns:
+        arn: !Ref RdsInstanceCreatedSnsTopic
+        topicName: RdsDbInstanceCreatedTopic
+  package:
+    patterns:
+      - services/resource_manager/post_aurora_creation/lambda_function.py
+  environment:
+    TABLE_NAME: ${self:custom.tenantTable}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: 
+        - dynamodb:GetItem
+      Resource: 
+        Fn::GetAtt: [TenantTableDynamo, Arn]
+    - Effect: "Allow"
+      Action:
+        - secretsmanager:GetSecretValue
+      Resource: "*"

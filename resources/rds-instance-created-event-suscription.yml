@@ -1,0 +1,10 @@
+Resources:
+  RdsInstanceCreatedEventSuscription:
+    Type: AWS::RDS::EventSubscription
+    Properties:
+      Enabled: True
+      EventCategories:
+        - creation
+      SnsTopicArn: ${self:resources.3.Outputs.RdsInstanceCreatedSnsTopicArn.Value}
+      SourceType: db-instance
+      

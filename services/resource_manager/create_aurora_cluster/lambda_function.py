@@ -33,7 +33,6 @@ class Event(EventBase):
             data['randomPassword'] = self.generateRandomPassword()
             self.create_instance(data)
             self.store_db_secret(data)
-            print(data)
         except Exception as e:
             LOGGER.error(e)
             return Result.UNKNOWN, {}

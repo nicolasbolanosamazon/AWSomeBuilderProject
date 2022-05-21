@@ -1,0 +1,9 @@
+Resources:
+  RdsInstanceCreatedSnsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "RdsDbInstanceCreatedTopic"
+Outputs:
+  RdsInstanceCreatedSnsTopicArn:
+    Value:
+      Ref: RdsInstanceCreatedSnsTopic
