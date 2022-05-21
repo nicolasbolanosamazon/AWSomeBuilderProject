@@ -6,6 +6,7 @@ phases:
     runtime-versions:
       python: 3.8
     commands:
+      - sudo yum install docker
       - sudo systemctl enable docker.service
       - sudo systemctl start docker.service
       - npm install -g serverless
