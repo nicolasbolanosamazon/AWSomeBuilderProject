@@ -1,0 +1,17 @@
+update_tenant:
+  handler: services/tenant_manager/update_tenant/lambda_function.handler
+  events:
+    - http:
+        method: POST
+        path: /tenant_managment/update_tenant
+  package:
+    patterns: 
+      - services/tenant_manager/update_tenant/lambda_function.py
+  environment:
+    TABLE_NAME: ${self:custom.tenantTable}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: 
+        - dynamodb:UpdateItem
+      Resource: 
+        Fn::GetAtt: [TenantTableDynamo, Arn]

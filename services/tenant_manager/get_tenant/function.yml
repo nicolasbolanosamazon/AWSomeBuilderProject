@@ -1,0 +1,17 @@
+get_tenant:
+  handler: services/tenant_manager/get_tenant/lambda_function.handler
+  events:
+    - http:
+        method: GET
+        path: /tenant_managment/get_tenant/{tenant_id}
+  package:
+    patterns: 
+      - services/tenant_manager/get_tenant/lambda_function.py
+  environment:
+    TABLE_NAME: ${self:custom.tenantTable}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: 
+        - dynamodb:GetItem
+      Resource: 
+        Fn::GetAtt: [TenantTableDynamo, Arn]

@@ -42,6 +42,9 @@ custom:
   tenantTable: ${self:custom.stage}-tenants-table
 functions:
   - ${file(services/tenant_manager/create_tenant/function.yml)}
+  - ${file(services/tenant_manager/get_tenant/function.yml)}
+  - ${file(services/tenant_manager/get_tenants/function.yml)}
+  - ${file(services/tenant_manager/update_tenant/function.yml)}
   - ${file(services/tenant_onboarding/function.yml)}
   - ${file(services/user_manager/create_user_group/function.yml)}
   - ${file(services/resource_manager/create_aurora_cluster/function.yml)}
