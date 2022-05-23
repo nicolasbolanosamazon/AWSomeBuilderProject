@@ -1,0 +1,19 @@
+create_user:
+  handler: services/user_manager/create_user/lambda_function.handler
+  events:
+    - http:
+        method: POST
+        path: /user_manager/create_user
+  package:
+    patterns:
+      - services/user_manager/create_user/lambda_function.py
+  environment:
+    COGNITO_POOL_ID:
+        Ref: CognitoUserPool
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - cognito-idp:AdminCreateUser
+        - cognito-idp:AdminAddUserToGroup
+      Resource:
+        Fn::GetAtt: [CognitoUserPool, Arn]

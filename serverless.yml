@@ -47,6 +47,7 @@ functions:
   - ${file(services/tenant_manager/update_tenant/function.yml)}
   - ${file(services/tenant_onboarding/function.yml)}
   - ${file(services/user_manager/create_user_group/function.yml)}
+  - ${file(services/user_manager/create_user/function.yml)}
   - ${file(services/resource_manager/create_aurora_cluster/function.yml)}
   - ${file(services/resource_manager/post_aurora_creation/function.yml)}
 
