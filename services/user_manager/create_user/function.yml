@@ -10,6 +10,7 @@ create_user:
   environment:
     COGNITO_POOL_ID:
         Ref: CognitoUserPool
+    TABLE_NAME: ${self:custom.tenantTable}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -17,3 +18,12 @@ create_user:
         - cognito-idp:AdminAddUserToGroup
       Resource:
         Fn::GetAtt: [CognitoUserPool, Arn]
+    - Effect: "Allow"
+      Action: 
+        - dynamodb:GetItem
+      Resource: 
+        Fn::GetAtt: [TenantTableDynamo, Arn]
+    - Effect: "Allow"
+      Action:
+        - secretsmanager:GetSecretValue
+      Resource: "*"

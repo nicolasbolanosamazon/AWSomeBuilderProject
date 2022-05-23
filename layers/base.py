@@ -1,6 +1,8 @@
 import enum
 import json
 import os
+import boto3
+import psycopg2
 from distutils.util import strtobool
 
 
@@ -80,3 +82,37 @@ class ResultBase(enum.Enum):
     @property
     def message(self):
         return self.__message
+
+class DBConnection:
+    def __init__(self, table_name, tenant_id):
+        self.__dynamodb_table_resource = boto3.resource('dynamodb')
+        self.__table_tenant_details = self.__dynamodb_table_resource.Table(table_name)
+        self.__secrets_manager_client = boto3.client('secretsmanager')
+        self.__tenant_id = tenant_id
+
+    def get_conn(self):
+        dbcredentials = json.loads(self.obtain_creds(self.__tenant_id)['SecretString'])
+        return psycopg2.connect(
+            dbname = dbcredentials['dbname'],
+            user = dbcredentials['username'],
+            password = dbcredentials['password'],
+            host = dbcredentials['host'],
+            port = dbcredentials['port']
+        )
+
+    def obtain_creds(self, tenant_id):
+        dynamo_item = self.fetch_dynamo_item(tenant_id)
+        credentialSecretARN = dynamo_item['Item']['dbCredentialsARN']
+        return self.__secrets_manager_client.get_secret_value(
+            SecretId = credentialSecretARN
+        )
+
+    def fetch_dynamo_item(self, tenant_id):
+        return self.__table_tenant_details.get_item(
+            Key = {
+                'tenant_id': tenant_id
+            },
+            AttributesToGet=[
+                'dbCredentialsARN'
+            ]
+        )
