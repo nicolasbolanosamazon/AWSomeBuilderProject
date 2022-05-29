@@ -30,10 +30,11 @@ class Event(EventBase):
             Key={
                 'tenant_id': tenant_details['tenant_id'],
             },
-            UpdateExpression="set tenantName = :tenantName, tenantDescription = :tenantDescription",
+            UpdateExpression="set tenantName = :tenantName, tenantDescription = :tenantDescription, isActive = :isActive",
             ExpressionAttributeValues={
                 ':tenantName' : tenant_details['tenantName'],
-                ':tenantDescription': tenant_details['tenantDescription'],             
+                ':tenantDescription': tenant_details['tenantDescription'], 
+                ':isActive': tenant_details['isActive']            
             },
             ReturnValues="UPDATED_NEW"
         )

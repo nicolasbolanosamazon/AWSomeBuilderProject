@@ -9,9 +9,11 @@ phases:
       - npm install -g serverless
       - npm install serverless-iam-roles-per-function
       - npm install serverless-python-requirements
+      - npm install serverless-associate-waf
       - npm install
       - pip3 install requests
       - pip3 install aws-psycopg2
+      - pip3 install python-jose
   build:
     commands:
       - serverless deploy

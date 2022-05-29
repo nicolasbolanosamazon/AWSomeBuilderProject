@@ -4,6 +4,7 @@ create_user:
     - http:
         method: POST
         path: /user_manager/create_user
+        cors: true
   package:
     patterns:
       - services/user_manager/create_user/lambda_function.py

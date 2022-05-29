@@ -4,6 +4,7 @@ get_tenant:
     - http:
         method: GET
         path: /tenant_managment/get_tenant/{tenant_id}
+        cors: true
   package:
     patterns: 
       - services/tenant_manager/get_tenant/lambda_function.py

@@ -1,0 +1,19 @@
+get_users_group:
+  handler: services/user_manager/get_users_group/lambda_function.handler
+  events:
+    - http:
+        method: GET
+        path: /user_manager/get_users/{tenant_id}
+        cors: true
+  package:
+    patterns:
+      - services/user_manager/get_users_group/lambda_function.py
+  environment:
+    COGNITO_POOL_ID:
+        Ref: CognitoUserPool
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: 
+        - cognito-idp:ListUsersInGroup
+      Resource: 
+        Fn::GetAtt: [CognitoUserPool, Arn]

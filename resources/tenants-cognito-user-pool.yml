@@ -30,10 +30,37 @@ Resources:
       ClientName: tenants-${self:custom.stage}-user-pool-client
       UserPoolId:
         Ref: CognitoUserPool
+      CallbackURLs: 
+        - https://main.d2p5zbpxldnu9d.amplifyapp.com/
+        - https://main.d2p5zbpxldnu9d.amplifyapp.com/welcome/
+        - http://localhost:3000/
+        - http://localhost:3000/welcome/
+      LogoutURLs: 
+        - https://main.d2p5zbpxldnu9d.amplifyapp.com/
+        - http://localhost:3000
+        - http://localhost:3000/welcome/
+      DefaultRedirectURI: https://main.d2p5zbpxldnu9d.amplifyapp.com/welcome/
       GenerateSecret: false
       ExplicitAuthFlows:
         - ALLOW_USER_SRP_AUTH
         - ALLOW_REFRESH_TOKEN_AUTH
+      AllowedOAuthFlows:
+        - code
+        - implicit
+      AllowedOAuthFlowsUserPoolClient: True
+      AllowedOAuthScopes:
+        - aws.cognito.signin.user.admin
+        - email
+        - openid
+      SupportedIdentityProviders: 
+        - COGNITO
+
+  CognitoUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: octanklmsuserportal
+      UserPoolId: 
+        Ref: CognitoUserPool
 
 # Print out the Id of the User Pool that is created
 Outputs:

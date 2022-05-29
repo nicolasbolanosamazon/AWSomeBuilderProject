@@ -59,7 +59,9 @@ class Response:
             'statusCode': self.__status_code,
             'body': json.dumps(self.__data),
             'headers': {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Acces-Control-Allow-Credentials': True
             }
         }
 

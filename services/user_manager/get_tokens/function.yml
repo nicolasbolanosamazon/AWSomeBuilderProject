@@ -1,0 +1,12 @@
+get_tokens:
+  handler: services/user_manager/get_tokens/lambda_function.handler
+  events:
+    - http:
+        method: POST
+        path: /user_manager/get_tokens
+  package:
+    patterns:
+      - services/user_manager/get_tokens/lambda_function.py
+  environment:
+    COGNITO_POOL_CLIENT_ID:
+        Ref: CognitoUserPoolClient

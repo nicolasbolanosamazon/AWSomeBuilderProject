@@ -5,6 +5,7 @@ tenant_onboarding:
     - http:
         method: POST
         path: /onboard_tenant
+        cors: true
   package:
     patterns:
       - services/tenant_onboarding/lambda_function.py
