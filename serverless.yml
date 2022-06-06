@@ -11,12 +11,17 @@ provider:
   apiGateway:
     apiKeys:
       - internal-endpoints-key
+  layers:
+    - Ref: PythonRequirementsLambdaLayer
+
+
 
 package:
   patterns:
     - "!node_modules/**"
     - "!layers/**"
     - layers/base.py
+    - layers/lambda_authorizer/**
     - "!.vscode"
     - "!resources/**"
     - "!*.zip"
@@ -26,6 +31,8 @@ package:
     - "!python/**"
     - "!buildspec.yml"
     - "!__pychache__/**"
+    - "!package-lock.json"
+    - "!package.json"
 
 plugins:
   - serverless-iam-roles-per-function
@@ -34,13 +41,16 @@ plugins:
  
 custom:
   pythonRequirements:
-    dockerizePip: true
+    layer: true
+
   common:
     defaultStage: dev
     region: ${opt:region, 'us-east-1'}
     currentStage: ${opt:stage, self:custom.common.defaultStage}
   stage: ${self:custom.common.currentStage}
   tenantTable: ${self:custom.stage}-tenants-table
+  lambdaLogsTransformedBucket: ${self:custom.stage}-lambda-logs-transformed-bucket
+  logsTranformedQueue: ${self:custom.stage}-logs-transformed-queue
   associateWaf:
     name: ${self:custom.stage}-octank-api-waf
 
@@ -56,9 +66,18 @@ functions:
   - ${file(services/user_manager/get_tokens/function.yml)}
   - ${file(services/resource_manager/create_aurora_cluster/function.yml)}
   - ${file(services/resource_manager/post_aurora_creation/function.yml)}
+  - ${file(services/course_manager/get_courses/function.yml)}
+  - ${file(services/course_manager/create_course/function.yml)}
+  - ${file(services/tenant_cost_reporter/lambda_log_transformer/function.yml)}
+  - ${file(services/tenant_cost_reporter/create_input_csv/function.yml)}
+  - ${file(services/tenant_cost_reporter/queue_processor/function.yml)}
+  - ${file(layers/lambda_authorizer/function.yml)}
 
 resources:
   - ${file(resources/tenants-cognito-user-pool.yml)}
   - ${file(resources/tenants-dynamodb-table.yml)}
   - ${file(resources/rds-instance-created-event-suscription.yml)}
   - ${file(resources/rds-instance-created-sns-topic.yml)}
+  - ${file(resources/api-gateway-response.yml)}
+  - ${file(resources/transformed-lambda-logs-s3-bucket.yml)}
+  - ${file(resources/logs-transformed-queue.yml)}

@@ -1,0 +1,17 @@
+Resources: 
+  ApiGatewayAuthorizer:
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      AuthorizerUri: !Join 
+        - ''
+        - - 'arn:aws:apigateway:'
+          - !Ref 'AWS::Region'
+          - ':lambda:path/2015-03-31/functions/'
+          - !GetAtt 
+            - LambdaAuthorizerLambdaFunction
+            - Arn
+          - /invocations
+      IdentitySource: method.request.header.Authorization
+      Type: TOKEN
+      Name: ApiGatewayAuth
+      RestApiId: !Ref ApiGateway

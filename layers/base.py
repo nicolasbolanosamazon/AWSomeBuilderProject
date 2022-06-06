@@ -39,6 +39,10 @@ class EventBase:
     def event(self):
         return self._event
 
+    def log_tenant(self):
+        print(''.join(['Invoked by Tenant Id: ', self._event['requestContext']['authorizer']['tenantId']]))
+        print("Lambda function ARN:", self._context.invoked_function_arn)
+
 
 def _is_log_enabled():
     log_enabled = os.environ["LOG_ENABLED"]
@@ -60,8 +64,8 @@ class Response:
             'body': json.dumps(self.__data),
             'headers': {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Acces-Control-Allow-Credentials': True
+                'Access-Control-Allow-Origin': 'https://main.d2p5zbpxldnu9d.amplifyapp.com',
+                'Access-Control-Allow-Headers': '*'
             }
         }
 

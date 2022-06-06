@@ -1,0 +1,19 @@
+create_input_csv:
+  handler: services/tenant_cost_reporter/create_input_csv/lambda_function.handler
+  events:
+    - schedule: cron(0 0/1 * * ? *)
+  package:
+    patterns:
+      - services/tenant_cost_reporter/create_input_csv/lambda_function.py
+  environment:
+    INPUT_BUCKET_NAME: ${self:custom.lambdaLogsTransformedBucket}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - s3:PutObject
+      Resource:
+        Fn::Join:
+        - ""
+        - - Fn::GetAtt: [LambdaLogsTransformedBucket, Arn]
+          - "/*"
+        

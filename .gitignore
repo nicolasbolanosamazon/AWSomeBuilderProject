@@ -126,3 +126,4 @@ var/
 # Serverless directories
 .serverless
 *__pycache__/
+.requirements.zip

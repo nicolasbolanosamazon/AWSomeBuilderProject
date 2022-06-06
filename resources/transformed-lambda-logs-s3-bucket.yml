@@ -1,0 +1,9 @@
+Resources:
+  LambdaLogsTransformedBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - BucketKeyEnabled: true
+      BucketName: ${self:custom.lambdaLogsTransformedBucket}

@@ -4,7 +4,19 @@ get_tenant:
     - http:
         method: GET
         path: /tenant_managment/get_tenant/{tenant_id}
-        cors: true
+        cors:
+            origin: 'https://main.d2p5zbpxldnu9d.amplifyapp.com' # <-- Specify allowed origin
+            headers: # <-- Specify allowed headers
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+        authorizer:
+          name: lambda_authorizer
+          identitySource: method.request.header.Authorization
+          type: token
   package:
     patterns: 
       - services/tenant_manager/get_tenant/lambda_function.py

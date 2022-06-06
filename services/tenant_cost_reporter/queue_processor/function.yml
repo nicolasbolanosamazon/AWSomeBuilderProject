@@ -1,0 +1,28 @@
+queue_processor:
+  handler: services/tenant_cost_reporter/queue_processor/lambda_function.handler
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - logsTransformedQueue
+            - Arn
+  package:
+    patterns: 
+      - services/tenant_cost_reporter/queue_processor/lambda_function.py
+  environment:
+    INPUT_BUCKET_NAME: ${self:custom.lambdaLogsTransformedBucket}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - s3:ListBucket
+      Resource:
+        Fn::GetAtt: [LambdaLogsTransformedBucket, Arn]
+    - Effect: "Allow"
+      Action:
+        - s3:GetObject
+        - s3:PutObject
+      Resource:
+        Fn::Join:
+        - ""
+        - - Fn::GetAtt: [LambdaLogsTransformedBucket, Arn]
+          - "/*"

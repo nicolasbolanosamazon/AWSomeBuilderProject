@@ -1,10 +1,9 @@
-tenant_onboarding:
-  handler: services/tenant_onboarding/lambda_function.handler
-  timeout: 15
+create_course:
+  handler: services/course_manager/create_course/lambda_function.handler
   events:
     - http:
         method: POST
-        path: /onboard_tenant
+        path: /lms/course_manager/create_course
         cors:
             origin: 'https://main.d2p5zbpxldnu9d.amplifyapp.com' # <-- Specify allowed origin
             headers: # <-- Specify allowed headers
@@ -19,10 +18,17 @@ tenant_onboarding:
           identitySource: method.request.header.Authorization
           type: token
   package:
-    patterns:
-      - services/tenant_onboarding/lambda_function.py
+    patterns: 
+      - services/course_manager/create_course/lambda_function.py
+  environment:
+    TABLE_NAME: ${self:custom.tenantTable}
   iamRoleStatements:
+    - Effect: "Allow"
+      Action: 
+        - dynamodb:GetItem
+      Resource: 
+        Fn::GetAtt: [TenantTableDynamo, Arn]
     - Effect: "Allow"
       Action:
         - secretsmanager:GetSecretValue
-      Resource: 'arn:aws:secretsmanager:us-east-1:238181680470:secret:dev-api-keys-TTv22n'
+      Resource: "*"

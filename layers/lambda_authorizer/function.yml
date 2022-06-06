@@ -1,0 +1,10 @@
+lambda_authorizer:
+  handler: layers/lambda_authorizer/lambda_function.handler
+  package:
+    patterns: 
+      - layers/lambda_authorizer/lambda_function.py
+  environment:
+    COGNITO_POOL_ID:
+      Ref: CognitoUserPool
+    COGNITO_POOL_CLIENT_ID:
+      Ref: CognitoUserPoolClient

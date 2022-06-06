@@ -52,8 +52,14 @@ Resources:
         - aws.cognito.signin.user.admin
         - email
         - openid
+        - profile
       SupportedIdentityProviders: 
         - COGNITO
+      ReadAttributes:
+        - custom:tenant_id
+        - custom:tenant_user_role
+        - custom:full_name
+        - email
 
   CognitoUserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain

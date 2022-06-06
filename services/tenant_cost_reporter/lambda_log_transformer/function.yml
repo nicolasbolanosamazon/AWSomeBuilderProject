@@ -1,0 +1,16 @@
+lambda_log_transformer:
+  handler: services/tenant_cost_reporter/lambda_log_transformer/lambda_function.handler
+  events:
+    - cloudwatchLog: 
+        logGroup: '/aws/lambda/${self:service}-${self:custom.stage}-get_courses'
+  package:
+    patterns:
+      - services/tenant_cost_reporter/lambda_log_transformer/lambda_function.py
+  environment:
+    SQS_NAME: ${self:custom.logsTranformedQueue}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - sqs:SendMessage
+      Resource:
+        Fn::GetAtt: [logsTransformedQueue, Arn]

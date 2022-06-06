@@ -1,3 +1,4 @@
 requests
 aws-psycopg2
-jose
+python-jose
+pandas
