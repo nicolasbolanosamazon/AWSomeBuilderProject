@@ -26,6 +26,7 @@ class Event(EventBase):
         self._response = Response(result, data).to_json()
 
     def create_course(self):
+        self.log_tenant()
         authorizer = self._event['requestContext']['authorizer']
         tenant_id = authorizer['tenantId']
         teacher_id = authorizer['userName']

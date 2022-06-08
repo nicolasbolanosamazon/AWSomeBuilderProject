@@ -51,6 +51,7 @@ custom:
   tenantTable: ${self:custom.stage}-tenants-table
   lambdaLogsTransformedBucket: ${self:custom.stage}-lambda-logs-transformed-bucket
   logsTranformedQueue: ${self:custom.stage}-logs-transformed-queue
+  acpOutputBucket: ${self:custom.stage}-acp-output-bucket
   associateWaf:
     name: ${self:custom.stage}-octank-api-waf
 
@@ -67,7 +68,9 @@ functions:
   - ${file(services/resource_manager/create_aurora_cluster/function.yml)}
   - ${file(services/resource_manager/post_aurora_creation/function.yml)}
   - ${file(services/course_manager/get_courses/function.yml)}
+  - ${file(services/course_manager/get_course/function.yml)}
   - ${file(services/course_manager/create_course/function.yml)}
+  - ${file(services/course_manager/grade_student/function.yml)}
   - ${file(services/tenant_cost_reporter/lambda_log_transformer/function.yml)}
   - ${file(services/tenant_cost_reporter/create_input_csv/function.yml)}
   - ${file(services/tenant_cost_reporter/queue_processor/function.yml)}
@@ -81,3 +84,4 @@ resources:
   - ${file(resources/api-gateway-response.yml)}
   - ${file(resources/transformed-lambda-logs-s3-bucket.yml)}
   - ${file(resources/logs-transformed-queue.yml)}
+  - ${file(resources/acp-output-bucket.yml)}

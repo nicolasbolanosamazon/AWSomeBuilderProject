@@ -16,4 +16,12 @@ create_input_csv:
         - ""
         - - Fn::GetAtt: [LambdaLogsTransformedBucket, Arn]
           - "/*"
-        
+    - Effect: "Allow"
+      Action:
+        - s3:ListBucket
+      Resource:
+        Fn::GetAtt: [LambdaLogsTransformedBucket, Arn]
+    - Effect: "Allow"
+      Action:
+        - application-cost-profiler:ImportApplicationUsage
+      Resource: "*"

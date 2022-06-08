@@ -1,5 +1,5 @@
 Resources:
-  LambdaLogsTransformedBucket:
+  AcpOutputBucket:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: Private
@@ -7,22 +7,24 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
-      BucketName: ${self:custom.lambdaLogsTransformedBucket}
+      BucketName: ${self:custom.acpOutputBucket}
 
-  LambdaLogsTransformedBucketPolicy:
+  AcpOutputBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref LambdaLogsTransformedBucket
+      Bucket: !Ref AcpOutputBucket
       PolicyDocument:
         Statement:
           - Effect: "Allow"
             Action:
-              - s3:GetObject*
+              - s3:PutObject*
+              - s3:GetEncryptionConfiguration
             Resource:
-              Fn::Join:
-              - ""
-              - - Fn::GetAtt: [LambdaLogsTransformedBucket, Arn]
-                - "/*"
+                - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt: [AcpOutputBucket, Arn]
+                    - "/*"
+                - Fn::GetAtt: [AcpOutputBucket, Arn]
             Principal:
               Service: application-cost-profiler.amazonaws.com
             Condition:

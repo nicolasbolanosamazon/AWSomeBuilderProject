@@ -1,0 +1,34 @@
+grade_student:
+  handler: services/course_manager/grade_student/lambda_function.handler
+  events:
+    - http:
+        method: POST
+        path: /lms/course_manager/grade_student
+        cors:
+            origin: 'https://main.d2p5zbpxldnu9d.amplifyapp.com' # <-- Specify allowed origin
+            headers: # <-- Specify allowed headers
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+        authorizer:
+          name: lambda_authorizer
+          identitySource: method.request.header.Authorization
+          type: token
+  package:
+    patterns: 
+      - services/course_manager/grade_student/lambda_function.py
+  environment:
+    TABLE_NAME: ${self:custom.tenantTable}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: 
+        - dynamodb:GetItem
+      Resource: 
+        Fn::GetAtt: [TenantTableDynamo, Arn]
+    - Effect: "Allow"
+      Action:
+        - secretsmanager:GetSecretValue
+      Resource: "*"
