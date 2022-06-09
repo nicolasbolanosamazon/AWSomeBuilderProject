@@ -7,4 +7,4 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
-      BucketName: "newbucket"
+      BucketName: ${self:custom.cicdBucket}

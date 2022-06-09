@@ -52,6 +52,7 @@ custom:
   lambdaLogsTransformedBucket: ${self:custom.stage}-lambda-logs-transformed-bucket
   logsTranformedQueue: ${self:custom.stage}-logs-transformed-queue
   acpOutputBucket: ${self:custom.stage}-acp-output-bucket
+  cicdBucket: ${self:custom.stage}-iambucket
   associateWaf:
     name: lms_waf
 
