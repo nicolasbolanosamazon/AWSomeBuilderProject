@@ -53,7 +53,7 @@ custom:
   logsTranformedQueue: ${self:custom.stage}-logs-transformed-queue
   acpOutputBucket: ${self:custom.stage}-acp-output-bucket
   associateWaf:
-    name: ${self:custom.stage}-octank-api-waf
+    name: lms_waf
 
 functions:
   - ${file(services/tenant_manager/create_tenant/function.yml)}
