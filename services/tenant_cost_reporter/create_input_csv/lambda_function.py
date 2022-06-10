@@ -29,7 +29,7 @@ class Event(EventBase):
         time_obj = time.strptime(time.ctime())
         csvio = io.StringIO()
         writer = csv.writer(csvio)
-        writer.writerow(['ApplicationId', 'TenantId', 'UsageAccountId', 'StartTime', 'EndTime', 'ResourceId'])
+        writer.writerow(['ApplicationId', 'TenantId', 'TenantDesc','UsageAccountId', 'StartTime', 'EndTime', 'ResourceId'])
         self.__s3_client.put_object(
             Body = csvio.getvalue(),
             ContentType = 'text/csv',

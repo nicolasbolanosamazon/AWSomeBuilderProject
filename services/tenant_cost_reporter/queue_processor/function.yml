@@ -11,6 +11,7 @@ queue_processor:
       - services/tenant_cost_reporter/queue_processor/lambda_function.py
   environment:
     INPUT_BUCKET_NAME: ${self:custom.lambdaLogsTransformedBucket}
+    TABLE_NAME: ${self:custom.tenantTable}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -26,3 +27,8 @@ queue_processor:
         - ""
         - - Fn::GetAtt: [LambdaLogsTransformedBucket, Arn]
           - "/*"
+    - Effect: "Allow"
+      Action: 
+        - dynamodb:GetItem
+      Resource: 
+        Fn::GetAtt: [TenantTableDynamo, Arn]

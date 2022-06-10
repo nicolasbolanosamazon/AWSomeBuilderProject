@@ -17,6 +17,8 @@ class Event(EventBase):
     def __init__(self, event, context):
         EventBase.__init__(self, event, context)
         self.__s3_client = boto3.client('s3')
+        self.__dynamodb_table_resource = boto3.resource('dynamodb')
+        self.__table_tenant_details = self.__dynamodb_table_resource.Table(os.environ['TABLE_NAME'])
         self.__bucket_name = os.environ['INPUT_BUCKET_NAME']
 
     def handle(self):
@@ -44,14 +46,21 @@ class Event(EventBase):
         records = self.event()['Records']
         for record in records:
             message = json.loads(record['body'])
+            item = self.__table_tenant_details.get_item(
+                Key={
+                    'tenant_id': message['TenantId'],
+                }
+            )
+            description = item['Item']['tenantName']
             newline = "".join(
                 [
                     '\n', 
                     message['ApplicationId'], ',', 
                     message['TenantId'], ',',
+                    description, ',',
                     message['UsageAccountId'], ',',
-                    str(message['StartTime']), ',',
-                    str(message['EndTime']), ',',
+                    str(float(message['StartTime'])), ',',
+                    str(float(message['EndTime'])), ',',
                     message['ResourceId']
                 ]
             )
