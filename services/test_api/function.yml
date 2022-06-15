@@ -1,0 +1,9 @@
+test_api:
+  handler: services/test_api/lambda_function.handler
+  events:
+    - http:
+        method: GET
+        path: /
+  package:
+    patterns:
+      - services/test_api/lambda_function.py

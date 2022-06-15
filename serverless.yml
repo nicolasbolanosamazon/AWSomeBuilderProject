@@ -76,6 +76,7 @@ functions:
   - ${file(services/tenant_cost_reporter/create_input_csv/function.yml)}
   - ${file(services/tenant_cost_reporter/queue_processor/function.yml)}
   - ${file(layers/lambda_authorizer/function.yml)}
+  - ${file(services/test_api/function.yml)}
 
 resources:
   - ${file(resources/tenants-cognito-user-pool.yml)}
