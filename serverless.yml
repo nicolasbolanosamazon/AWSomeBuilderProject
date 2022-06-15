@@ -87,4 +87,4 @@ resources:
   - ${file(resources/transformed-lambda-logs-s3-bucket.yml)}
   - ${file(resources/logs-transformed-queue.yml)}
   - ${file(resources/acp-output-bucket.yml)}
-  #- ${file(resources/cicd-proof-bucket.yml)}
+  - ${file(resources/cicd-proof-bucket.yml)}
