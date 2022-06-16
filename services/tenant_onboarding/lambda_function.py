@@ -57,7 +57,7 @@ class Event(EventBase):
             data['response'] = ''.join(["Tenant ",self.__tenant_id, " created!"])
             data['tenant_id'] = self.__tenant_id
         except Exception as e:
-            LOGGER.error(e)
+            LOGGER.exception('Error!')
             return Result.UNKNOWN, {}
         else:
             return Result.CREATION_SUCCEEDED, data
